@@ -1,50 +1,43 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-
-function HomeScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Home!</Text>
-    </View>
-  );
-}
-
-function SettingsScreen() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import { Text } from 'react-native-paper';
+import Stock from '../screen/Stocks';
+import SearchStock from '../screen/SearchStocks';
+import Demo from '../screen/Demo';
 
 const Tab = createBottomTabNavigator();
 
-export default function Navigation() {
+export default function Navigation({ navigation }) {
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            if (route.name === 'Home') {
-              return (
-                <Ionicons name={ focused ? 'ios-information-circle' : 'ios-information-circle-outline' } size={size} color={color} />
-              );
-            } else if (route.name === 'Settings') {
-              return (
-                <Ionicons name={focused ? 'ios-list-circle' : 'ios-list-circle-outline'} size={size} color={color} />
-              );
-            }
-          },
-          tabBarInactiveTintColor: 'gray',
-          tabBarActiveTintColor: 'tomato',
-        })}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} options={{ tabBarBadge: 3 }}  barStyle={{ paddingBottom: 80 }} />
-        <Tab.Screen name="Settings" component={SettingsScreen}  barStyle={{ paddingBottom: 80 }} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <>
+      
+        <Tab.Navigator
+          screenOptions={({ route }) => ({
+            tabBarIcon: ({ focused, color, size }) => {
+              let iconName;
+
+              if (route.name === 'Stock') {
+                iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
+              } else if (route.name === 'Demo') {
+                iconName = focused ? 'ios-search' : 'ios-search-outline';
+              }
+              else if (route.name === 'SearchStock') {
+                iconName = focused ? 'ios-list-circle' : 'ios-list-circle-outline';
+              }
+              return <Ionicons name={iconName} size={size} color={color} />;
+            },
+            tabBarActiveTintColor: 'tomato',
+            tabBarInactiveTintColor: 'gray',
+          })}
+        >
+          <Tab.Screen name="Stock" component={Stock} />
+          <Tab.Screen name="SearchStock" component={SearchStock} />
+          <Tab.Screen name="Demo" component={Demo} />
+        </Tab.Navigator>
+      
+      
+    </>
   );
 }
