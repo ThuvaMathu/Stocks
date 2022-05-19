@@ -1,43 +1,38 @@
 import * as React from 'react';
+import { View,Button,StatusBar, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import Stock from './screen/Stocks';
-import SearchStock from './screen/SearchStocks';
-import Demo from './screen/Demo';
-import { Text } from 'react-native-paper';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import Navigation from './components/BottomNav';
 
-const Tab = createBottomTabNavigator();
 
-export default function App() {
+
+
+function HomeScreen({ navigation }) {
   return (
-    <>
-      <NavigationContainer>
-        <Tab.Navigator
-          screenOptions={({ route }) => ({
-            tabBarIcon: ({ focused, color, size }) => {
-              let iconName;
-
-              if (route.name === 'Stock') {
-                iconName = focused ? 'ios-bar-chart' : 'ios-bar-chart-outline';
-              } else if (route.name === 'Demo') {
-                iconName = focused ? 'ios-search' : 'ios-search-outline';
-              }
-              else if (route.name === 'SearchStock') {
-                iconName = focused ? 'ios-list-circle' : 'ios-list-circle-outline';
-              }
-              return <Ionicons name={iconName} size={size} color={color} />;
-            },
-            tabBarActiveTintColor: 'tomato',
-            tabBarInactiveTintColor: 'gray',
-          })}
-        >
-          <Tab.Screen name="Stock" component={Stock} />
-          <Tab.Screen name="SearchStock" component={SearchStock} />
-          <Tab.Screen name="Demo" component={Demo} />
-        </Tab.Navigator>
-      </NavigationContainer>
-      
-    </>
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+       <StatusBar barStyle="dark-content" backgroundColor="#ecf0f1" />
+      <Text>Home Screen</Text>
+      <Button
+        title="Go to Main menu"
+        onPress={() => navigation.navigate('Nav')}
+      />
+    </View>
   );
 }
+
+
+
+const Stack = createNativeStackNavigator();
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Home" component={HomeScreen} options={{ tabBarLabel: 'home!' }}/>
+        <Stack.Screen name="Nav" component={Navigation} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+
+export default App;
