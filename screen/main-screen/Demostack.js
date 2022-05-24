@@ -1,7 +1,8 @@
 import React from "react";
 import { ImageBackground, Button,  StyleSheet, Text, View } from "react-native";
-import image2 from "../assets/WelcomeImage.jpg"
+import image2 from "../../assets/WelcomeImage.jpg"
 const image = { uri: "https://wallpapercave.com/wp/wp8938157.jpg" };
+
 export default function Demostack({ navigation }) {
     return (
         <>

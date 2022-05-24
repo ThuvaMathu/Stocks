@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Text, Button, View, StyleSheet } from 'react-native';
-import { Stockstyles as styles } from '../stylesheet/style';
+import { styles } from '../../stylesheet/style';
 import { DataTable } from 'react-native-paper';
 import { Divider, Badge, Card, Paragraph } from 'react-native-paper';
 
@@ -19,7 +19,7 @@ export default function Stock({ navigation }) {
 
                 {data.map((cardValue) => (
                     <>
-                        <DataTable.Row onPress={() => console.log('Pressed',cardValue.Title )}>
+                        <DataTable.Row onPress={() => console.log('Pressed',cardValue.Title )} key={cardValue.Title}>
                             <DataTable.Cell>{cardValue.Title}</DataTable.Cell>
                             <DataTable.Cell numeric style={styles.price}> {cardValue.price} </DataTable.Cell>
                             <DataTable.Cell numeric style={styles.increase} >
