@@ -1,38 +1,39 @@
 import * as React from 'react';
-import { View,Button,StatusBar, Text } from 'react-native';
+import { View, Button, StatusBar, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import LoginProvider, { useLogin } from './context/LoginProvider';
 import Navigation from './components/BottomNav';
-import Demostack from './screen/Demostack';
+import Demostack from './screen/main-screen/Demostack';
+import AuthForm from './screen/main-screen/AuthForm';
+import MainNav from './screen/MainNavigator';
 
 
 
-
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-       <StatusBar barStyle="dark-content" backgroundColor="#ecf0f1" />
-      <Text>Home Screen kanisha</Text>
-      <Button title="Log in" onPress={() => navigation.navigate('Nav')} />
-      <Button title=" Demostack" onPress={() => navigation.navigate('Demostack')} />
-    </View>
-  );
-}
 
 
 
 const Stack = createNativeStackNavigator();
-
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="Home" component={HomeScreen} options={{ tabBarLabel: 'home!' }}/>
-        <Stack.Screen name="Demostack" component={ Demostack} options={{ tabBarLabel: 'home!' }}/>
-        <Stack.Screen name="Nav" component={Navigation} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <LoginProvider>
+      <NavigationContainer>
+        <MainNav />
+      </NavigationContainer>
+    </LoginProvider>
+
   );
 }
-
 export default App;
+
+
+
+
+
+{/* <NavigationContainer>
+  <Stack.Navigator initialRouteName="Auth" screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="Auth" component={AuthForm} options={{ tabBarLabel: 'Authentication!' }} />
+    <Stack.Screen name="Demostack" component={Demostack} options={{ tabBarLabel: 'home!' }} />
+    <Stack.Screen name="Nav" component={Navigation} />
+  </Stack.Navigator>
+</NavigationContainer> */}
