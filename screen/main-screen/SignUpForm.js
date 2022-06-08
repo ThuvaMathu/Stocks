@@ -3,7 +3,7 @@ import { ImageBackground, View, StatusBar,ScrollView, Image, Text, TextInput } f
 import { Surface, Button, Divider } from 'react-native-paper';
 import himg from '../../assets/sbanner.png';
 import { useState } from 'react';
-import img from '../../assets/login_bac.jpg';
+import img from '../../assets/StockChart.png';
 import { styles } from '../../stylesheet/style';
 import Api from '../../api/Api'
 import { Ionicons } from '@expo/vector-icons';
@@ -90,7 +90,7 @@ export default function SignUpForm({ navigation }) {
         <View style={styles.container}>
         <ImageBackground source={img} resizeMode="cover" style={styles.image}>
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Surface style={styles.home_surface}>
+                <Surface style={styles.home_surface2}>
                     <View style={styles.navbar}>
                         <Image style={styles.sicon} source={himg} />
                         <Ionicons style={styles.iconbar} name="arrow-back-circle-outline" size={40} color="#ffc23a" onPress={() => navigation.goBack()} />
@@ -106,12 +106,12 @@ export default function SignUpForm({ navigation }) {
                             <TextInput secureTextEntry={true} placeholder='Confirm Password' style={styles.input} onChangeText={setCpass} value={cpass} />
                             <Text style={styles.errormsg}> {error && error}</Text>
                             <View style={styles.button_container}>
-                                <Button style={styles.sign_button} onPress={handlesignup}><Text style={styles.b_text}>Sign UP →</Text></Button>
+                                <Button style={styles.sign_button} onPress={handlesignup}><Text style={styles.b_text}>Sign UP</Text></Button>
                             </View>
                         </View>
                         <View style={styles.info_container}>
                             <Text >Already have an account?</Text>
-                            <Button type="text" onPress={() => navigation.navigate('Signin')}><Text style={styles.l_text}>Sign In</Text></Button>
+                            <Button type="text" onPress={() => navigation.navigate('Signin')} color="#ffc23a"><Text style={styles.l_text}>Sign In</Text></Button>
                             
                         </View>
                         </ScrollView>

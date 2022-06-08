@@ -1,27 +1,22 @@
 import * as React from 'react';
-import { ImageBackground, View, StatusBar, ScrollView, Image, Text, TextInput } from 'react-native';
+import { ImageBackground, View, Image, Text, TextInput,SafeAreaView } from 'react-native';
 import { Surface, Button, Divider } from 'react-native-paper';
-import img from '../../assets/login_bac.jpg';
+import img from '../../assets/StockChart.png';
 import himg from '../../assets/sbanner.png';
 import { styles } from '../../stylesheet/style';
 import Api from '../../api/Api'
 import { useState } from 'react';
 import { useLogin } from '../../context/LoginProvider';
-import { AntDesign } from '@expo/vector-icons';
-import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const API_URL = "http://192.168.1.113:8000";
 
-export default function SignInForm({ route, navigation }) {
-
+export default function SignInForm({ navigation }) {
 
 
-    const { setLoggedIn, setUserData } = useLogin();
 
-    const [text, onChangeText] = React.useState("");
-    const [pass, onChangePass] = React.useState("");
-    const [message, setMessage] = useState('hellow');
+    const { setLoggedIn, setUserProfile} = useLogin();
+
+    
     const [error, setError] = useState('');
     const [errormsg, setErrormsg] = useState('');
 
@@ -36,6 +31,7 @@ export default function SignInForm({ route, navigation }) {
 
         setUserInfo({ ...userInfo, [fieldName]: value });
     };
+
     const validate = (text) => {
         setError('')
         const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
@@ -45,6 +41,7 @@ export default function SignInForm({ route, navigation }) {
         }
         return reg.test(text);
     };
+
     const passValidator = (password) => {
         setError('')
         if (password.length == 0) {
@@ -52,10 +49,11 @@ export default function SignInForm({ route, navigation }) {
         } else if (password.length < 8 || password.length > 20) {
             setError("Password should be 8 to 20 characters")
         } else {
-            return true;1234567
+            return true;
         }
     };
-   
+
+
     const handlesignin = async () => {
         if (validate(email) && passValidator(password)) {
             console.log("clicked");
@@ -64,58 +62,56 @@ export default function SignInForm({ route, navigation }) {
                     headers: { 'Content-Type': 'application/json' },
                 });
                 if (res.data.result) {
-                    console.log(res);
-                    await AsyncStorage.setItem('@MyApp_user', JSON.stringify(res.data))
+                    await getData(email);
+                    await AsyncStorage.setItem('@MyApp_user', JSON.stringify(res.data.user))
                     setUserInfo({ email: '', password: '' });
                     setErrormsg(res.data.message);
-                    onLoggedIn(res.data.token);
-                    setUserData(res.data)
+                    setUserProfile(res.data.user);
                     setLoggedIn(true)
                 }
+
                 console.log(res.data);
             } catch (error) {
-                setErrormsg(error.response.data.message);
-                console.log(error);
+                console.log(error.response)
+                if(error.response?.data){
+                    setErrormsg(error.response.data.message);
+                }else setErrormsg("Somthing went wrong! Try again");
+
             }
         }
     };
 
-    const onLoggedIn = token => {
-        fetch(`${API_URL}/private`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`,
-            },
-        })
-            .then(async res => {
-                try {
-                    const jsonRes = await res.json();
-                    if (res.status === 200) {
-                        setMessage(jsonRes.message);
-                    }
-                } catch (err) {
-                    console.log(err);
-                };
-            })
-            .catch(err => {
-                console.log(err);
+    const getData = async (email) => {
+        console.log("clicked getData");
+        try {
+            const res = await Api.post('/getData', { email }, {
+                headers: { 'Content-Type': 'application/json' },
             });
-    }
+            if (res.data.result) {
+                console.log(JSON.parse(res.data.data), "response from data")
+                if (JSON.parse(res.data.data) !== null) {
+                    await AsyncStorage.setItem('@MyApp_data', JSON.parse(res.data.data))
+                }
+                //return res.data.data;
+            }
+            //console.log(res.data);
+        } catch (error) {
+            console.log(error, "slot error");
 
+        }
+    };
     return (
 
         <View style={styles.container}>
             <ImageBackground source={img} resizeMode="cover" style={styles.image}>
                 <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                    <Surface style={styles.home_surface}>
+                <SafeAreaView>
+                    <Surface style={styles.home_surface2}>
                         <View style={styles.navbar}>
                             <Image style={styles.sicon} source={himg} />
-                            <Ionicons style={styles.iconbar} name="arrow-back-circle-outline" size={40} color="#ffc23a" onPress={() => navigation.goBack()} />
+                            {/* <Ionicons style={styles.iconbar} name="arrow-back-circle-outline" size={40} color="#ffc23a" onPress={() => navigation.goBack()} /> */}
                         </View>
                         <Divider style={styles.divider} />
-                        <ScrollView style={styles.scrollView}>
-
                             <Text style={styles.header}>Sign In</Text>
                             <View style={styles.form_container}>
                                 <TextInput keyboardType='email-address' placeholder='Email' style={styles.input} onChangeText={value => handleOnChange(value, 'email')} value={email} />
@@ -128,13 +124,14 @@ export default function SignInForm({ route, navigation }) {
                             </View>
                             <View style={styles.info_container}>
                                 <Text >Don't have an account?</Text>
-                                <Button type="text" onPress={() => navigation.navigate('Signup')}><Text style={styles.l_text}>sign up</Text></Button>
+                                <Button type="text" onPress={() => navigation.navigate('Signup')} color="#ffc23a"><Text style={styles.l_text}>sign up</Text></Button>
                             </View>
-                        </ScrollView>
+                            <Button type="text" onPress={() => navigation.navigate('Signup')} color="#ffc23a"><Text style={styles.l_text}>Help?</Text></Button>
                     </Surface>
+                    </SafeAreaView>
                 </View>
             </ImageBackground>
         </View>
-
+        
     );
 }
