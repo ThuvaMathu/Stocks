@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { ImageBackground, ActivityIndicator, View, ScrollView, Image, Text } from 'react-native';
-import { Surface, Button, Divider } from 'react-native-paper';
+import { ImageBackground, View, ScrollView, Image, Text } from 'react-native';
+import { Surface } from 'react-native-paper';
 import img from '../../assets/StockChart.png';
-
 import himg from '../../assets/sbanner.png';
 import { styles } from '../../stylesheet/style';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLogin } from '../../context/LoginProvider';
 import { BarIndicator, } from 'react-native-indicators';
+import Api from '../../api/Api';
 
 export default function HomeScreen({ navigation }) {
 
     const { setLoggedIn, setUserData, setUserProfile } = useLogin();
-    const [state, setState] = useState({});
+    const [errormsg, setErrormsg] = useState();
     useEffect(() => {
+        setErrormsg();
         const timeout = setTimeout(() => {
-            getAllKeys();
+            testCon()
         }, 1500);
         return () => {
-            setState({});
             clearTimeout(timeout);
         }
     }, []);
@@ -32,12 +32,13 @@ export default function HomeScreen({ navigation }) {
                     const data = await AsyncStorage.getItem("@MyApp_data")
                     if (data !== null) {
                         setUserData(JSON.parse(data))
-                    } else console.log("Empty data1")
+                    } 
+                    //else console.log("Empty data")
                 } catch (e) {
 
-                    console.log("Empty data2")
+                    console.log(e)
                 }
-                console.log(value, "profile")
+                //console.log(value, "profile")
                 setLoggedIn(true)
             }
         } catch (e) {
@@ -59,6 +60,23 @@ export default function HomeScreen({ navigation }) {
             console.log(e, "error in store data")
         }
     }
+    const testCon = async () => {
+        try {
+            const res = await Api.get('/TestConnection', {
+                headers: { 'Content-Type': 'application/json' },
+            });
+            if (res.data.result) {
+                getAllKeys();
+            }
+            //console.log(res.data);
+        } catch (error) {
+            console.log(error)
+            if (error.response?.data) {
+                setErrormsg(error.response.data.message);
+            } else setErrormsg("Error connecting with server! Try again later");
+
+        }
+    }
 
     return (
 
@@ -72,7 +90,10 @@ export default function HomeScreen({ navigation }) {
                                 <Text style={styles.p_text}>By Selvasothy T</Text>
                                 <Image style={styles.stretch} source={himg} />
                             </View>
-                            <BarIndicator color="#ffc23a" count={4} size={30} />
+                            {
+                                errormsg ? <Text style={styles.loading_state2}>{errormsg}</Text> :
+                                    <BarIndicator color="#ffc23a" count={4} size={30} />
+                            }
                         </ScrollView>
                     </Surface>
                 </View>

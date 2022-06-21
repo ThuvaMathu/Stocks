@@ -1,12 +1,9 @@
 import React from 'react';
-import { ImageBackground, View, StatusBar,ScrollView, Image, Text, TextInput } from 'react-native';
-import { Surface, Button, Divider } from 'react-native-paper';
-import himg from '../../assets/sbanner.png';
+import {View,ScrollView,Text, TextInput } from 'react-native';
+import { Surface, Button} from 'react-native-paper';
 import { useState } from 'react';
-import img from '../../assets/login_bac.jpg';
 import { styles } from '../../stylesheet/style';
 import Api from '../../api/Api'
-import { Ionicons } from '@expo/vector-icons';
 import { useLogin } from '../../context/LoginProvider';
 
 
@@ -25,7 +22,7 @@ export default function ChangePassword({ navigation }) {
     const [errormsg, setErrormsg] = useState('');
     const [cpass, setCpass] = useState("");
 
-    const { email, password, newpassword } = userInfo;
+    const {password, newpassword } = userInfo;
 
     const handleOnChange = (value, fieldName) => {
         setUserInfo({ ...userInfo, [fieldName]: value });
@@ -51,7 +48,6 @@ export default function ChangePassword({ navigation }) {
 
     const handleupdate = async () => {
         if (passValidator(newpassword, cpass)) {
-            console.log("clicked");
             try {
                 const res = await Api.post('/cpass', { ...userInfo }, {
                     headers: { 'Content-Type': 'application/json' },
@@ -63,8 +59,9 @@ export default function ChangePassword({ navigation }) {
                 }
                 console.log(res.data);
             } catch (error) {
-                setErrormsg(error.response.data.message);
-                console.log(error);
+                if (error.response?.data) {
+                    setErrormsg(error.response.data.message);
+                } else setErrormsg("Somthing went wrong! Try again");
             }
         }
     };
@@ -77,7 +74,7 @@ export default function ChangePassword({ navigation }) {
                    
                     <ScrollView style={styles.scrollView}>
 
-                        <Text style={styles.header}>Update Password</Text>
+                        <Text style={styles.header2}>Update Password</Text>
                         <View style={styles.form_container}>
                             <TextInput secureTextEntry={true} placeholder='Current Password' style={styles.input} onChangeText={value => handleOnChange(value, 'password')} value={password} />
                             <TextInput secureTextEntry={true} placeholder='new Password' style={styles.input} onChangeText={value => handleOnChange(value, 'newpassword')} value={newpassword} />

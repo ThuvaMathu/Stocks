@@ -13,8 +13,10 @@ export default function SearchStock({ navigation, route }) {
   useFocusEffect(
     useCallback(() => {
       setStatement();
+      setErrormsg();
       getdata();
       return () => {
+        onChangeSearch("")
       };
     }, [])
   );
@@ -25,6 +27,7 @@ export default function SearchStock({ navigation, route }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
   const [statement, setStatement] = useState();
+  const [errormsg, setErrormsg] = useState();
 
   const onChangeSearch = (query) => {
     setSearchQuery(query)
@@ -32,41 +35,10 @@ export default function SearchStock({ navigation, route }) {
       return row.symbol.toString().toLowerCase().includes(query.toString().toLowerCase());
     });
     if (filteredRows.length > 0) {
-      console.log(filteredRows, "filter")
       setRowdata(filteredRows)
     }
 
   };
-
-  const demo = [{
-    "symbol": "RLJ",
-    "name": "Activision Blizzard",
-    "sector": "Communication Services",
-    "subSector": "Communication Services",
-    "headQuarter": "Santa Monica, CALIFORNIA",
-    "dateFirstAdded": null,
-    "cik": "0000718877",
-    "founded": "1983-06-10"
-  }, {
-    "symbol": "HEQ",
-    "name": "Adobe",
-    "sector": "Technology",
-    "subSector": "Technology",
-    "headQuarter": "San Jose, CALIFORNIA",
-    "dateFirstAdded": null,
-    "cik": "0000796343",
-    "founded": "1986-01-08"
-  }, {
-    "symbol": "GOOGL",
-    "name": "ADP",
-    "sector": "Industrials",
-    "subSector": "Industrials",
-    "headQuarter": "Roseland, NEW JERSEY",
-    "dateFirstAdded": null,
-    "cik": "0000008670",
-    "founded": "1961-09-01"
-  }]
-
   const API_KEY = 'f09e040716cb0920a7927288d97a5067'
 
   const getdata = async () => {
@@ -94,11 +66,11 @@ export default function SearchStock({ navigation, route }) {
   const checkData = async () => {
     try {
       const jsonValue = await AsyncStorage.getItem("@MyApp_data")
-      if (jsonValue != null) {
-        console.log(jsonValue, "initial store data")
+      const value = JSON.parse(jsonValue)
+      if (value != null) {
+        //console.log(JSON.parse(jsonValue), "initial store data")
         return jsonValue;
       } else return null
-      console.log(jsonValue != null ? JSON.parse(jsonValue) : null, "example")
     } catch (e) {
       console.log(e, "error in store data")
       return null
@@ -108,8 +80,10 @@ export default function SearchStock({ navigation, route }) {
   const handleclick = async (symbol) => {
     const jdata = checkData();
     const temp = { [symbol]: symbol }
+
     if (jdata != null) {
       try {
+
         await AsyncStorage.mergeItem("@MyApp_data", JSON.stringify(temp)).then(async () => {
           updateData(symbol);
         })
@@ -119,7 +93,7 @@ export default function SearchStock({ navigation, route }) {
     } else {
       try {
         await AsyncStorage.setItem("@MyApp_data", JSON.stringify(temp)).then(async () => {
-          updateData();
+          updateData(symbol);
         })
       } catch (error) {
         console.log(error, "error in merge data")
@@ -131,7 +105,6 @@ export default function SearchStock({ navigation, route }) {
   const updateData = async (symbol) => {
     const data = await checkData();
     const email = userProfile.email;
-    //console.log(data, "clicked updateData");
     try {
       const res = await Api.post('/userData', { email, data }, {
         headers: { 'Content-Type': 'application/json' },
@@ -141,29 +114,30 @@ export default function SearchStock({ navigation, route }) {
           screen: 'StockScreen',
           params: { click: true, symbol: symbol },
         });
-        //console.log(res.data.message, ": response from data")
       }
       console.log(res.data);
     } catch (error) {
       console.log(error, "slot error");
-      console.log(error.response.data.message)
-      console.log(JSON.parse(error.response.data.userData.data))
-    }
-  }
-  const removeValue = async () => {
-    try {
-      await AsyncStorage.removeItem('@MyApp_data')
-    } catch (e) {
+      if (error.response?.data) {
+        setErrormsg(error.response.data.message);
+      } else setErrormsg("Somthing went wrong! Try again");
 
     }
+  };
 
-    console.log('Done.')
+  if (errormsg) {
+    return (
+      <Surface style={styles.tab_surface}>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 20,marginHorizontal:50 }}>
+          <Text style={styles.loading_state}>{errormsg}</Text>
+        </View>
+      </Surface>
+
+    )
   }
   return (
     <View style={{ flex: 1, }}>
       <Surface style={styles.tab_surface}>
-
-
         <Searchbar placeholder="Search" onChangeText={onChangeSearch} value={searchQuery} />
         {/* <Button style={styles.sign_button} onPress={() => removeValue()}><Text style={styles.b_text}>get obj</Text></Button>  */}
         <ScrollView style={styles.scrollView}>
@@ -178,7 +152,7 @@ export default function SearchStock({ navigation, route }) {
               </DataTable.Row>
             )) : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 50 }}>
               {statement ?
-                  <Text style={styles.loading_state}>{statement}</Text> : <BarIndicator color="#ffc23a" count={4} size={40}/>
+                <Text style={styles.loading_state}>{statement}</Text> : <BarIndicator color="#ffc23a" count={4} size={40} />
               }
             </View>
           }

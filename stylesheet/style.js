@@ -3,38 +3,13 @@ import { Dimensions } from "react-native";
 const screenWidth = Dimensions.get("window").width;
 
 export const styles = StyleSheet.create({
-  textStyle: {
-    fontSize: 20,
-  },
-
-  otherStyle: {
-    position: 'absolute',
-    justifyContent: 'center',
-  },
-
-  title: {
-    fontFamily: 'Helvetica',
-    fontSize: 20,
-    fontWeight: 'bold',
-  },
-  increase: {
-    color: 'white',
-    //marginRight:10,
-    backgroundColor: 'red',
-    justifyContent: 'center',
-    marginHorizontal: 10,
-    marginVertical: 10
-  },
-  increase_text: {
-    color: 'white',
 
 
-  },
+  //==================== home  ========
   price: {
     marginLeft: 100,
     flex: 1,
   },
-  //==================== home  ========
   home_surface: {
     padding: 20,
     minHeight: 200,
@@ -69,26 +44,7 @@ export const styles = StyleSheet.create({
     marginBottom: 40,
     textAlign: "center",
   },
-  // discription: {
-  //   marginVertical: 20,
-  //   marginHorizontal: 10,
-  //   borderRadius: 10,
-  //   backgroundColor: '#fcf2d9',
-  //   justifyContent: "center",
-  //   minHeight: 100,
-  //   padding: 10,
-  // },
-  // dis_head: {
-  //   color: '#e09d04',
-  //   fontWeight: 'bold',
-  //   fontSize: 20,
-  // },
-  // dis_para: {
-  //   marginLeft: 5,
-  //   color: '#f5aa02',
-  //   fontSize: 16,
-  //   textAlign: "justify"
-  // },
+
   navbar: {
     padding: 10,
     flexDirection: "row",
@@ -112,27 +68,7 @@ export const styles = StyleSheet.create({
     height: 0.5,
     backgroundColor: '#e09d04'
   },
-  menu_item: {
-    marginHorizontal: 20,
-  },
-  menu_head: {
-    color: '#e09d04',
-    fontWeight: 'bold',
-    fontSize: 18,
-    marginBottom: 5,
-  },
-  info_button: {
-    alignItems: "left",
-  },
-  loader_container: {
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    justifyContent: 'center',
-    alignItems: "center",
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
-    zIndex: 2,
-  },
+
   //==================== Log in form  ========
   container: {
     flex: 1,
@@ -150,28 +86,7 @@ export const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
-  surface: {
-    padding: 5,
-    minHeight: 350,
-    width: 280,
-    elevation: 6,
-    borderRadius: 25,
-  },
-  buttons_s: {
-    backgroundColor: '#e09d04',
-    color: 'white',
-    marginBottom: 20,
-  },
-  buttons_l: {
-    backgroundColor: '#ffc23a',
-    color: 'white',
-    marginBottom: 10,
-  },
-  buttond: {
-    marginTop: 40,
-    backgroundColor: '#ffc23a',
-    color: 'white',
-  },
+
   b_text: {
     color: 'white',
     fontSize: 14,
@@ -186,19 +101,20 @@ export const styles = StyleSheet.create({
     marginBottom: 50,
   },
 
-  bottomback: {
-    position: "absolute",
-    bottom: 0,
-    padding: 20,
-  },
-  menu_button_container: {
-    marginVertical: 20,
-    marginHorizontal: 30,
-  },
-  //==================== Signin Form ================= 
+
+  //==================== Form ================= 
   header: {
     color: '#ffc23a',
     fontSize: 32,
+    marginHorizontal: 20,
+    marginBottom: 10,
+    marginTop: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  header2: {
+    color: '#ffc23a',
+    fontSize: 28,
     marginHorizontal: 20,
     marginBottom: 10,
     marginTop: 20,
@@ -263,7 +179,12 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
   },
-
+  loading_state2: {
+    marginTop: 40,
+    color: 'red',
+    fontSize: 24,
+    fontWeight: "bold",
+  },
   //========================== stock ===============
 
   symbol: {
@@ -329,21 +250,13 @@ export const styles = StyleSheet.create({
   },
   //========================== chart =========================
 
-  chartStyle: {
-    marginVertical: 8,
-    borderRadius: 16,
-  },
   chartres: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: 20,
   },
-  rf_text: {
-    color: "white",
-    fontSize: 16,
 
-  },
   res_button: {
     textAlign: "center",
     color: "white",
@@ -379,7 +292,6 @@ export const styles = StyleSheet.create({
   },
   header_con: {
     flexDirection: "row",
-    //justifyContent: "space-between",
     alignItems: "center",
     marginHorizontal: 20,
   },
@@ -393,21 +305,16 @@ export const styles = StyleSheet.create({
     color: 'green',
     fontWeight: "bold",
   },
-  dkeys: {
-    // backgroundColor:'#fce0a4'
-
-  },
+ 
   newscontainer: {
     marginHorizontal: 4,
   },
   newsLogo: {
     height: 110,
     width: 110,
-
     borderRadius: 8,
   },
   news_header_con: {
-    //alignItems: "center",
     marginHorizontal: 4,
     backgroundColor: '#f7e4ba',
     padding: 14,
@@ -468,43 +375,19 @@ export const styles = StyleSheet.create({
   },
   linechart_con:{
     position: 'relative',
-    //width: '100%',
-    //backgroundColor:"red"
 
   },
   chart_loading:{
     marginLeft:50,
   },
 
-  //========================swipe==========
-  leftAction: {
-    flex: 1,
-    backgroundColor: '#311e3c',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    flexDirection: I18nManager.isRTL ? 'row' : 'row-reverse',
-    width: 20,
-  },
-  actionIcon: {
-    width: 30,
-    marginHorizontal: 10,
-  },
-  rightAction: {
-    alignItems: 'center',
-    flexDirection: I18nManager.isRTL ? 'row-reverse' : 'row',
-    backgroundColor: '#dd2c00',
-    flex: 1,
-    justifyContent: 'flex-end',
-    width: 100,
-  },
-  //========================Profile==========
   pro_name: {
     fontSize: 24,
     color: '#ffc23a',
     fontWeight: "800"
   },
   pro_email: {
-    fontSize: 14,
+    fontSize: 18,
     color: '#ffc23a',
     fontWeight: "500"
 
@@ -526,7 +409,7 @@ export const styles = StyleSheet.create({
   },
   list_titel_signout: {
     fontSize: 20,
-    color: 'red',
+    color: '#eb345e',
     fontWeight: "500"
   },
   pro_img: {
@@ -540,12 +423,10 @@ export const styles = StyleSheet.create({
   },
   pro_cell_header: {
     padding: 5,
-    //justifyContent: "flex-start",
     alignItems: 'center',    
   },
   pro_cell: {
     padding:5,
-    //justifyContent: 'center',
     alignItems: 'center',
   },
   pro_cell_header_text: {
@@ -578,7 +459,27 @@ delete_text:{
   fontSize:20,
   fontWeight:"500",
   color:"red"
-}
+},
+card:{
+  borderRadius:10,
+  borderColor:"#ffc23a",
+  borderWidth:0.3,
+  marginBottom:5,
+},
+card_con: {
+  paddingHorizontal:12,
+  paddingVertical:6
+},
+card_para: {
+  marginTop:8,
+  paddingHorizontal:12,
+  fontSize:16
+},
+card_title:{
+  color:"#ffc23a",
+  fontSize:22,
+  fontWeight:"700",
+},
 
 });
 

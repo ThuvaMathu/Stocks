@@ -1,5 +1,5 @@
 import React from 'react';
-import { ImageBackground, View, StatusBar,ScrollView, Image, Text, TextInput } from 'react-native';
+import { ImageBackground, View,ScrollView, Image, Text, TextInput } from 'react-native';
 import { Surface, Button, Divider } from 'react-native-paper';
 import himg from '../../assets/sbanner.png';
 import { useState } from 'react';
@@ -30,7 +30,7 @@ export default function SignUpForm({ navigation }) {
     const emailValidator = (text) => {
         setError('')
         const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-        console.log(text, reg.test(text));
+        //console.log(text, reg.test(text));
         if (!reg.test(text)) {
             setError("Enter valid email address")
         }
@@ -67,21 +67,23 @@ export default function SignUpForm({ navigation }) {
 
     const handlesignup = async () => {
         if (nameValidator(name) && emailValidator(email) &&  passValidator(password, cpass)) {
-            console.log("clicked");
+            setError();
+            //console.log("clicked");
             try {
                 const res = await Api.post('/signup', { ...userInfo }, {
                     headers: { 'Content-Type': 'application/json' },
                 });
                 if (res.data.result) {
                     setUserInfo({ email: '', password: '', name: '',cpass:'' });
-                    setErrormsg(res.data.message);
-                    navigation.navigate('Signin')
+                    setError(res.data.message);
+                    navigation.navigate('Signin', {success: true})
                 }
-                console.log(res.data);
+                ///console.log(res.data);
             } catch (error) {
-                setErrormsg(error.response.data.message);
-                console.log(error);
-            }
+                if(error.response?.data){
+                    setError(error.response.data.message);
+                }else setError("Somthing went wrong! Try again");
+           }
         }
     };
 
